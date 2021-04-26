@@ -75,5 +75,5 @@ Create Post - Where you can create
 Profile Screen -(Read/GET) Query logged in user object ,(Update/PUT) Update user profile image
 Search Screen - Where User can see different Users 
 
-## unit 10 GIF
+## Unit 10 GIF
 <img src="Mypage.gif" width=600>
