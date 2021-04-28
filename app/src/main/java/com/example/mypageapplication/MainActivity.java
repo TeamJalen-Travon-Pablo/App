@@ -1,6 +1,7 @@
 package com.example.mypageapplication;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         user=auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        goToLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             Toast.makeText(MainActivity.this, "Account created!!", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         } else {
