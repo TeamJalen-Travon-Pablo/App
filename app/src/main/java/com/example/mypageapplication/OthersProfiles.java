@@ -1,18 +1,14 @@
-package com.example.mypageapplication.Fragments;
+package com.example.mypageapplication;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mypageapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,49 +20,45 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-public class ProfileFragment extends Fragment {
-    ImageView background, pick_image;
+public class OthersProfiles extends AppCompatActivity {
+    ImageView background;
     CircleImageView ic_profile_image;
     TextView followers, followers_count,following,following_count;
     TextView username, bio;
-    Button settings, update_bg;
+    Button isFollow;
     RecyclerView recyclerView;
+    String userId;
 
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference reference;
 
-    public ProfileFragment(){
-
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        initialize(view);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_others_profiles);
 
+        init();
+        userId=getIntent().getStringExtra("userId");
         auth=FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
         reference= FirebaseDatabase.getInstance().getReference().child("Users");
-        return view;
+        getUserData();
     }
-        private void initialize(View v){
-        background=v.findViewById(R.id.background);
-        pick_image=v.findViewById(R.id.pick_image);
-        ic_profile_image=v.findViewById(R.id.profile);
-        followers=v.findViewById(R.id.followers);
-        followers_count=v.findViewById(R.id.followers_count);
-        following=v.findViewById(R.id.following);
-        username=v.findViewById(R.id.username);
-        bio=v.findViewById(R.id.bio);
-        update_bg=v.findViewById(R.id.update_bg);
-        settings=v.findViewById(R.id.settings);
-        recyclerView=v.findViewById(R.id.recyclerView);
-        }
-        private void getUserData(){
+    private void init(){
+        background=findViewById(R.id.background);
+
+        ic_profile_image=findViewById(R.id.profile);
+        followers=findViewById(R.id.followers);
+        followers_count=findViewById(R.id.followers_count);
+        following=findViewById(R.id.following);
+        username=findViewById(R.id.username);
+        bio=findViewById(R.id.bio);
+
+        isFollow=findViewById(R.id.isFollow);
+        recyclerView=findViewById(R.id.recyclerView);
+    }
+    private void getUserData(){
         reference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -94,5 +86,5 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-        }
+    }
 }

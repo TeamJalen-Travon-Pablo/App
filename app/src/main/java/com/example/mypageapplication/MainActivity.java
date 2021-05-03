@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             private void saveData(String f, String e, String p) {
                 user = auth.getCurrentUser();
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("full name", f);
+                map.put("full_name", f);
                 map.put("email", e);
                 map.put("password", p);
                 map.put("uid", user.getUid());
