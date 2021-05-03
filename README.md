@@ -77,6 +77,7 @@ Search Screen - Where User can see different Users
 
 ## Unit 10 GIF
 <img src="Mypage.gif" width=600>
+
 ## Unit 11 GIF
 <img src="Mypage Unit 11 update.gif" width=600>
 
