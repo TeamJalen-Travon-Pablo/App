@@ -25,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,7 +65,7 @@ public class OthersProfile extends AppCompatActivity {
         reference= FirebaseDatabase.getInstance().getReference().child("Users");
         storageReference= FirebaseStorage.getInstance().getReference().child("Profiles");
         bgRef= FirebaseStorage.getInstance().getReference().child("Backgrounds");
-//
+
         toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -189,16 +188,15 @@ public class OthersProfile extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                String n=snapshot.child("username").getValue().toString();
-
-                String p=snapshot.child("profileUrl").getValue().toString();
-                String b=snapshot.child("background").getValue().toString();
+                String n=snapshot.child("full name").getValue().toString();
+               // String p=snapshot.child("profileUrl").getValue().toString();
+               // String b=snapshot.child("background").getValue().toString();
 
 
                 username.setText(n);
 
-                Picasso.get().load(p).placeholder(R.drawable.ic_profile_image).into(profile);
-                Picasso.get().load(b).into(bg);
+              //  Picasso.get().load(p).placeholder(R.drawable.ic_profile_image).into(profile);
+                // Picasso.get().load(b).into(bg);
 
 
 //                Glide.with(getActivity()).load(p).centerCrop().placeholder(R.drawable.profile_image).into(profile);

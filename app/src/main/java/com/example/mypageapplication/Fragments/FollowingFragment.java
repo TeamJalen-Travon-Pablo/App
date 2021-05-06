@@ -1,4 +1,5 @@
 package com.example.mypageapplication.Fragments;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -110,17 +111,16 @@ public class FollowingFragment extends Fragment {
         });
 
 
-        reference.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        reference.child(user.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists())
-                {
-                    String p = snapshot.child("profileUrl").getValue().toString();
-
-                    Picasso.get().load(p).placeholder(R.drawable.ic_profile_image).into(profile);
-                }else
-                {
-
+                if (snapshot.exists()) {
+                    if (snapshot.child("profileUrl").getValue() != null) {
+                        String p = snapshot.child("profileUrl").getValue().toString();
+                        Picasso.get().load(p).placeholder(R.drawable.ic_profile_image).into(profile);
+                    }
+                } else {
                 }
             }
 

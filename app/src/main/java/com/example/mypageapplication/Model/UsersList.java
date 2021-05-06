@@ -61,7 +61,7 @@ public class UsersList {
     }
 
     public String getUser_id() {
-        return null;
+        return this.uid;
     }
 
     public void getusername() {

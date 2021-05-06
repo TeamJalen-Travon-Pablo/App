@@ -1,6 +1,5 @@
 package com.example.mypageapplication;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypageapplication.Adapters.SearchAdapter;
-import com.example.mypageapplication.Model.Data_One;
+import com.example.mypageapplication.Model.UsersList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +29,7 @@ import java.util.List;
 
 public class SearchUsers extends AppCompatActivity {
     RecyclerView recyclerView;
-    List<Data_One> dataOneList;
+    List<UsersList> dataOneList;
     SearchAdapter adapter;
     Toolbar toolbar;
 
@@ -79,8 +78,7 @@ public class SearchUsers extends AppCompatActivity {
 
         dataOneList =new ArrayList<>();
 
-        Context context = null;
-        adapter=new SearchAdapter(dataOneList, context);
+        adapter=new SearchAdapter(this,dataOneList);
         recyclerView.setAdapter ( adapter );
 
 
@@ -95,7 +93,7 @@ public class SearchUsers extends AppCompatActivity {
                 if (et_search.getText().toString().equals("")) {
                     dataOneList.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Data_One dataOne =dataSnapshot.getValue(Data_One.class);
+                        UsersList dataOne = dataSnapshot.getValue(UsersList.class);
                         dataOneList.add(dataOne);
 
                     }
@@ -131,7 +129,7 @@ public class SearchUsers extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataOneList.clear ();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren ()){
-                    Data_One user=snapshot.getValue (Data_One.class);
+                    UsersList user = snapshot.getValue (UsersList.class);
                     dataOneList.add ( user );
                 }
 

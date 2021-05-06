@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mypageapplication.Model.Data_One;
 import com.example.mypageapplication.Model.UsersList;
 import com.example.mypageapplication.OthersProfile;
 import com.example.mypageapplication.R;
@@ -31,18 +30,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     private final Context context;
     List<UsersList> dataList;
+    FirebaseUser user;
+    DatabaseReference reference;
 
-    public SearchAdapter(Context context, List<UsersList> dataList) {
+   public SearchAdapter(Context context, List<UsersList> dataList) {
         this.context = context;
         this.dataList = dataList;
     }
 
-    FirebaseUser user;
-    DatabaseReference reference;
 
-    public SearchAdapter(List<Data_One> dataOneList, Context context) {
+
+    /*public SearchAdapter(List<Data_One> dataOneList, Context context) {
         this.context = context;
-    }
+    }*/
 
     public Context getContext() {
         return context;

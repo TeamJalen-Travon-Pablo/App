@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mypageapplication.Adapters.SearchAdapter;
@@ -52,10 +53,14 @@ public class SearchUsersActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         auth = FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
-        reference= FirebaseDatabase.getInstance().getReference().child("Users");
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+
+        lists = new ArrayList<>();
+        adapter = new SearchAdapter(this,lists);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         getUsersList();
 
@@ -82,7 +87,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     }
 
     private void searchUsers(String a) {
-        Query query=reference.orderByChild("fill_name").startAt(et_search.getText().toString()).endAt(et_search.getText().toString()+"\uf8ff");
+        Query query=reference.orderByChild("full name").startAt(et_search.getText().toString()).endAt(et_search.getText().toString()+"\uf8ff");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -91,8 +96,7 @@ public class SearchUsersActivity extends AppCompatActivity {
                     UsersList usersList=datasnapshot.getValue(UsersList.class);
                     lists.add(usersList);
                 }
-                adapter = new SearchAdapter(SearchUsersActivity.this,lists);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -102,7 +106,6 @@ public class SearchUsersActivity extends AppCompatActivity {
         });
     }
     private void getUsersList() {
-        lists=new ArrayList<>();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -111,9 +114,9 @@ public class SearchUsersActivity extends AppCompatActivity {
                     UsersList usersList=datasnapshot.getValue(UsersList.class);
                     lists.add(usersList);
                 }
-                adapter = new SearchAdapter(SearchUsersActivity.this,lists);
-                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
