@@ -53,4 +53,19 @@ public class UsersList {
     public void setProfile(String profile) {
         this.profile = profile;
     }
+
+    public void getUsername() {
+    }
+
+    public void getProfileUrl() {
+    }
+
+    public String getUser_id() {
+        return null;
+    }
+
+    public void getusername() {
+        return;
+    }
+
 }

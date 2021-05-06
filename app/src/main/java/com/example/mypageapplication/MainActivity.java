@@ -21,16 +21,25 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    EditText fullName, email, password;
+
     TextView goToLogin;
+    EditText username,email,password;
     Button signUp;
     ProgressDialog progressDialog;
+
+    Random random;
 
     FirebaseAuth auth;
     FirebaseUser user;
     DatabaseReference reference;
+
+    String url="https://firebasestorage.googleapis.com/v0/b/signin-function.appspot.com/o/download.jpg?alt=media&token=143d5e9d-c652-465d-b513-6ee75537ad11";
+
+    String profile="https://firebasestorage.googleapis.com/v0/b/signin-function.appspot.com/o/user.svg?alt=media&token=561ed6be-db1a-4068-8023-15904ed28796";
+
 
 
     @Override
@@ -40,92 +49,108 @@ public class MainActivity extends AppCompatActivity {
 
 
         init();
-        auth = FirebaseAuth.getInstance();
+
+        auth=FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference= FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+
 
         goToLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this,Login.class));
+
             }
         });
+
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String f = fullName.getText().toString();
-                String e = email.getText().toString();
-                String p = password.getText().toString();
-                if (f.isEmpty() || e.isEmpty() || p.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "This field's can't be empty", Toast.LENGTH_SHORT).show();
-                } else if (p.length() < 6) {
-                    Toast.makeText(MainActivity.this, "Password must be greater than 6 characters", Toast.LENGTH_SHORT).show();
-                } else {
-                    createAccount(f, e, p);
-                }
-            }
-        });
-    }
+                final String n=username.getText().toString();
 
-    private void init() {
-        fullName = findViewById(R.id.fullName);
-        email = findViewById(R.id.email);
-        password = findViewById(R.id.password);
-        goToLogin = findViewById(R.id.goToLogin);
-        signUp = findViewById(R.id.signUp);
-    }
+                final String e=email.getText().toString();
+                String p=password.getText().toString();
 
-    private void createAccount(String f, String e, String p) {
-        progressDialog=new ProgressDialog(MainActivity.this); 
-        progressDialog.setTitle("Creating New Account");
-        progressDialog.setMessage("Please wait..");
-        progressDialog.show();
-        Task<AuthResult> authResultTask = auth.createUserWithEmailAndPassword(e, p).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    //Verify
-                    auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                if (n.isEmpty())
+                {
+                }else if (e.isEmpty())
+                {
+                    email.setError("Please enter email..");
+                }else if (p.isEmpty())
+                {
+                    password.setError("Password cannot be empty..!");
+                }else
+                {
+                    progressDialog=new ProgressDialog(MainActivity.this);
+                    progressDialog.setTitle("Registering....");
+                    progressDialog.setMessage("Please wait..We're creating account for you a short while");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
+                    auth.createUserWithEmailAndPassword(e,p).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(MainActivity.this, "Please verify email", Toast.LENGTH_SHORT).show();
-                                saveData(f, e, p);
-                            } else {
-                                Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful())
+                            {
+                                ;
+
+                                auth=FirebaseAuth.getInstance();
+                                user=auth.getCurrentUser();
+
+                                HashMap<String,Object> map=new HashMap<>();
+                                map.put("username",n);
+                                map.put("user_id",user.getUid());
+                                map.put("email",e);
+                                map.put("profileUrl",profile);
+                                map.put("background",url);
+
+                                reference.child(user.getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful())
+                                        {
+                                            startActivity(new Intent(MainActivity.this,Login.class));
+                                            Toast.makeText(MainActivity.this, "Account created!!!", Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
+                                        }else
+                                        {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(MainActivity.this, "Something went wrong "+task.getException(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                            }else
+                            {
                                 progressDialog.dismiss();
+                                Toast.makeText(MainActivity.this, "Unable to register.."+task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
                     });
-                } else {
-                    progressDialog.dismiss();
-                    Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            private void saveData(String f, String e, String p) {
-                user = auth.getCurrentUser();
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("full_name", f)
-                map.put("email", e);
-                map.put("password", p);
-                map.put("uid", user.getUid());
-                reference.child(user.getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                            Toast.makeText(MainActivity.this, "Account created!!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        } else {
-                            Toast.makeText(MainActivity.this, "failed", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
-                    }
-                });
+
+
+
+
+
+
             }
         });
+
+
+
+
+
     }
-}
+
+    private void init()
+    {
+        goToLogin=findViewById(R.id.goToLogin);
+        username=findViewById(R.id.username);
+        email=findViewById(R.id.email);
+        password=findViewById(R.id.password);
+        signUp=findViewById(R.id.signUp);
+        random=new Random();
+    }}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="copy" type="id" />
+    <item name="delete" type="id" />
+    <item name="unfollow" type="id" />
+    <item name="comment_edit" type="id" />
+</resources>

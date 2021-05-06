@@ -10,16 +10,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_nav"
-        android:id="@+id/frame_layout"/>
+        android:id="@+id/frameLayout"
+        android:layout_above="@id/bottom_nav"
+
+        >
+    </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav"
-        app:itemIconTint="#137810"
-        android:background="@color/white"
         android:layout_alignParentBottom="true"
-        app:itemTextColor="#137810"
+        android:layout_alignParentStart="true"
+        android:background="@android:color/white"
+        app:itemIconTint="#138910"
+        app:itemTextColor="#138910"
+        app:menu="@menu/bottom_nav"
+        app:itemRippleColor="#138910"
         android:id="@+id/bottom_nav"/>
 
 </RelativeLayout>

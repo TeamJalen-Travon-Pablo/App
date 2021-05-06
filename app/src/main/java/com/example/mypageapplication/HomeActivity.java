@@ -1,6 +1,5 @@
 package com.example.mypageapplication;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,24 +12,42 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mypageapplication.Fragments.FavouriteFragment;
 import com.example.mypageapplication.Fragments.FeedFragment;
 import com.example.mypageapplication.Fragments.FollowingFragment;
-import com.example.mypageapplication.Fragments.ProfileFragment;
+import com.example.mypageapplication.Fragments.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
-   // Toolbar toolbar;
-    BottomNavigationView bottomNavigationView;
+
     FrameLayout frameLayout;
+    BottomNavigationView bottomNavigationView;
+
+    FirebaseAuth auth;
+    FirebaseUser user;
+
+    CircleImageView profile_image;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        bottomNavigationView = findViewById(R.id.bottom_nav);
-        frameLayout = findViewById(R.id.frame_layout);
+        frameLayout=findViewById(R.id.frameLayout);
+        bottomNavigationView=findViewById(R.id.bottom_nav);
+
+        auth=FirebaseAuth.getInstance();
+        user=auth.getCurrentUser();
+
+
+
+
+
+
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -39,31 +56,38 @@ public class HomeActivity extends AppCompatActivity {
                 if (id == R.id.following) {
                     FollowingFragment followingFragment = new FollowingFragment();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_layout, followingFragment);
+                    fragmentTransaction.replace(R.id.frameLayout, followingFragment);
                     fragmentTransaction.commit();
                 } else if (id == R.id.feed) {
                     FeedFragment feedFragment = new FeedFragment();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_layout, feedFragment);
+                    fragmentTransaction.replace(R.id.frameLayout, feedFragment);
                     fragmentTransaction.commit();
                 } else if (id == R.id.favourite) {
                     FavouriteFragment favouriteFragment = new FavouriteFragment();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_layout, favouriteFragment);
+                    fragmentTransaction.replace(R.id.frameLayout, favouriteFragment);
                     fragmentTransaction.commit();
-                } else if (id == R.id.Profile) {
-                    ProfileFragment profileFragment = new ProfileFragment();
+                } else if (id == R.id.profile) {
+                    UserFragment userFragment = new UserFragment();
                     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_layout, profileFragment);
+                    fragmentTransaction.replace(R.id.frameLayout, userFragment);
                     fragmentTransaction.commit();
-
-                    SharedPreferences.Editor editor = getSharedPreferences("USER", Context.MODE_PRIVATE).edit();
-                    editor.putString("profileId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+                    editor.putString("profileid", user.getUid());
                     editor.apply();
                 }
                 return true;
             }
         });
+
         bottomNavigationView.setSelectedItemId(R.id.following);
+
+
+
     }
+
+
+
+
 }
