@@ -75,5 +75,23 @@ Create Post - Where you can create
 Profile Screen -(Read/GET) Query logged in user object ,(Update/PUT) Update user profile image
 Search Screen - Where User can see different Users 
 
+## User Story
+1.Firebase Email Authentication ( Verification feature also ). Complete
+2.Retrieve Password. Complete
+3.Beautiful Bottom Navigation View. Complete
+4.Search Users Complete
+5.Upload a post or a text with colors.
+6.See Any User Profile Photos and Followers etc..
+7.Feed Lot of  Posts.
+8.Save Posts.
+9.Data Access While Offline.
+10.Like,Comment and Share features.
+11.Notifications
+12.Retrieve All Data From Firebase.
+
 ## Unit 10 GIF
 <img src="Mypage.gif" width=600>
+
+## Unit 11 GIF
+<img src="Mypage Unit 11 update.gif" width=600>
+
